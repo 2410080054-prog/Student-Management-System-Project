@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict Colleges - College Admission Predictor</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-graduation-cap"></i>
+                <span>College Predictor</span>
+            </div>
+            <div class="nav-menu">
+                <a href="predict.html" class="nav-link active">
+                    <i class="fas fa-search"></i> Predict
+                </a>
+                <a href="results.html" class="nav-link">
+                    <i class="fas fa-list"></i> Results
+                </a>
+                <a href="top-colleges.html" class="nav-link">
+                    <i class="fas fa-trophy"></i> Top Colleges
+                </a>
+                <div class="nav-user">
+                    <span id="userEmail">user@example.com</span>
+                    <button id="logoutBtn" class="btn-secondary btn-small">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            <button class="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="prediction-form">
+            <div class="section-header">
+                <h2><i class="fas fa-search"></i> Predict Your College</h2>
+                <p>Enter your exam details to get personalized college predictions</p>
+            </div>
+            
+            <form id="examForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="examType">Select Exam Type:</label>
+                        <select id="examType" name="examType" required>
+                            <option value="">-- Choose Exam --</option>
+                            <option value="jee_main">JEE Main</option>
+                            <option value="jee_advanced">JEE Advanced</option>
+                            <option value="eamcet">EAMCET</option>
+                            <option value="bitsat">BITSAT</option>
+                            <option value="mhcet">MHCET</option>
+                            <option value="kcet">KCET</option>
+                            <option value="wbjee">WBJEE</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rank">Your Rank/Score:</label>
+                        <input type="number" id="rank" name="rank" placeholder="Enter your rank or score" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category">Category:</label>
+                        <select id="category" name="category" required>
+                            <option value="">-- Choose Category --</option>
+                            <option value="general">General</option>
+                            <option value="obc_ncl">OBC-NCL</option>
+                            <option value="sc">SC</option>
+                            <option value="st">ST</option>
+                            <option value="ews">EWS</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="state">Home State:</label>
+                        <select id="state" name="state">
+                            <option value="">-- Select State --</option>
+                            <option value="andhra_pradesh">Andhra Pradesh</option>
+                            <option value="telangana">Telangana</option>
+                            <option value="karnataka">Karnataka</option>
+                            <option value="tamil_nadu">Tamil Nadu</option>
+                            <option value="maharashtra">Maharashtra</option>
+                            <option value="delhi">Delhi</option>
+                            <option value="uttar_pradesh">Uttar Pradesh</option>
+                            <option value="west_bengal">West Bengal</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="preferredBranch">Preferred Branch:</label>
+                        <select id="preferredBranch" name="preferredBranch">
+                            <option value="">-- All Branches --</option>
+                            <option value="computer_science">Computer Science Engineering</option>
+                            <option value="electronics">Electronics Engineering</option>
+                            <option value="mechanical">Mechanical Engineering</option>
+                            <option value="civil">Civil Engineering</option>
+                            <option value="electrical">Electrical Engineering</option>
+                            <option value="chemical">Chemical Engineering</option>
+                            <option value="it">Information Technology</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="preferredLocation">Preferred Location:</label>
+                        <select id="preferredLocation" name="preferredLocation">
+                            <option value="">-- All Locations --</option>
+                            <option value="andhra_pradesh">Andhra Pradesh</option>
+                            <option value="telangana">Telangana</option>
+                            <option value="karnataka">Karnataka</option>
+                            <option value="tamil_nadu">Tamil Nadu</option>
+                            <option value="maharashtra">Maharashtra</option>
+                            <option value="delhi">Delhi</option>
+                            <option value="uttar_pradesh">Uttar Pradesh</option>
+                            <option value="west_bengal">West Bengal</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary btn-large">
+                        <i class="fas fa-search"></i> Predict Colleges
+                    </button>
+                    <button type="reset" class="btn-secondary">
+                        <i class="fas fa-redo"></i> Reset Form
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <section class="prediction-info">
+            <div class="info-cards">
+                <div class="info-card">
+                    <i class="fas fa-info-circle"></i>
+                    <h3>How Predictions Work</h3>
+                    <p>Our algorithm analyzes your rank and compares it with historical cutoff data to predict your admission chances.</p>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Accuracy</h3>
+                    <p>Predictions are based on previous year data and may vary. Always verify with official sources.</p>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Privacy</h3>
+                    <p>Your data is secure and only used for prediction purposes. We don't share your information.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../assets/auth.js"></script>
+    <script src="../assets/predict.js"></script>
+</body>
+</html>
