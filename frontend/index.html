@@ -4,26 +4,352 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>College Admission Predictor</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <!-- Redirect to login page -->
-    <script>
-        // Check if user is authenticated
-        const token = localStorage.getItem('authToken');
-        if (token) {
-            // User is logged in, redirect to predict page
-            window.location.href = 'pages/predict.html';
-        } else {
-            // User not logged in, redirect to login page
-            window.location.href = 'pages/login.html';
-        }
-    </script>
-    
-    <div class="loading">
-        <i class="fas fa-spinner fa-spin"></i>
-        <p>Redirecting...</p>
+    <div id="app">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>College Predictor</span>
+                </div>
+                <div class="nav-menu">
+                    <a href="#predict" class="nav-link active">Predict</a>
+                    <a href="#colleges" class="nav-link">Colleges</a>
+                    <a href="#results" class="nav-link">Results</a>
+                </div>
+                <div class="nav-user">
+                    <span id="userEmail">Guest</span>
+                    <button id="logoutBtn" class="btn-secondary btn-small" style="display: none;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="container">
+            <!-- Login Section -->
+            <section id="loginSection" class="auth-section">
+                <div class="auth-container">
+                    <div class="auth-header">
+                        <i class="fas fa-lock"></i>
+                        <h2>Login to Your Account</h2>
+                        <p>Enter your credentials to access the predictor</p>
+                    </div>
+                    
+                    <form id="loginForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <div class="input-group">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="email" name="email" required 
+                                       placeholder="Enter your email" class="form-input">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <div class="input-group">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="password" name="password" required 
+                                       placeholder="Enter your password" class="form-input">
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary btn-full">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </button>
+                    </form>
+                    
+                    <!-- Demo Accounts -->
+                    <div class="demo-accounts">
+                        <h3>Demo Accounts</h3>
+                        <div class="demo-account" onclick="fillDemoAccount('student@demo.com', 'demo123')">
+                            <strong>Student:</strong> student@demo.com / demo123
+                        </div>
+                        <div class="demo-account" onclick="fillDemoAccount('admin@demo.com', 'admin123')">
+                            <strong>Admin:</strong> admin@demo.com / admin123
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Prediction Section (Hidden by default) -->
+            <section id="predictSection" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <h1><i class="fas fa-search"></i> College Admission Predictor</h1>
+                    <p>Enter your entrance exam details to predict eligible colleges</p>
+                </div>
+
+                <div class="prediction-form-container">
+                    <form id="predictionForm" class="prediction-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="examType">Exam Type</label>
+                                <select id="examType" name="examType" class="form-input" required>
+                                    <option value="">Select Exam</option>
+                                    <option value="jee_main">JEE Main</option>
+                                    <option value="jee_advanced">JEE Advanced</option>
+                                    <option value="eamcet">EAMCET</option>
+                                    <option value="bitsat">BITSAT</option>
+                                    <option value="srmap">SRMJEEE</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="rank">Your Rank/Score</label>
+                                <input type="number" id="rank" name="rank" class="form-input" required 
+                                       placeholder="Enter your rank or score">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <select id="category" name="category" class="form-input" required>
+                                    <option value="general">General</option>
+                                    <option value="obc_ncl">OBC-NCL</option>
+                                    <option value="obc_cl">OBC-CL</option>
+                                    <option value="sc">SC</option>
+                                    <option value="st">ST</option>
+                                    <option value="ews">EWS</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="branch">Preferred Branch</label>
+                                <select id="branch" name="branch" class="form-input">
+                                    <option value="">All Branches</option>
+                                    <option value="computer_science">Computer Science</option>
+                                    <option value="electronics">Electronics</option>
+                                    <option value="mechanical">Mechanical</option>
+                                    <option value="civil">Civil</option>
+                                    <option value="electrical">Electrical</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="location">Preferred Location</label>
+                                <select id="location" name="location" class="form-input">
+                                    <option value="">All Locations</option>
+                                    <option value="andhra_pradesh">Andhra Pradesh</option>
+                                    <option value="telangana">Telangana</option>
+                                    <option value="karnataka">Karnataka</option>
+                                    <option value="tamil_nadu">Tamil Nadu</option>
+                                    <option value="maharashtra">Maharashtra</option>
+                                    <option value="delhi">Delhi</option>
+                                    <option value="uttar_pradesh">Uttar Pradesh</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary btn-full">
+                            <i class="fas fa-search"></i> Predict Colleges
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Info Cards -->
+                <div class="info-cards">
+                    <div class="info-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Accurate Predictions</h3>
+                        <p>Based on historical cutoff data and trends from previous years</p>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-filter"></i>
+                        <h3>Smart Filtering</h3>
+                        <p>Filter colleges by branch, location, and category for personalized results</p>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-database"></i>
+                        <h3>Comprehensive Data</h3>
+                        <p>Detailed information about fees, placements, and facilities</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Colleges Section (Hidden by default) -->
+            <section id="collegesSection" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <h1><i class="fas fa-university"></i> Top Engineering Colleges</h1>
+                    <p>Explore the top 75 engineering colleges in India based on NIRF rankings</p>
+                </div>
+
+                <!-- Enhanced Search Section -->
+                <div class="search-section">
+                    <div class="search-header">
+                        <h2><i class="fas fa-search"></i> Search Any College in India</h2>
+                        <p>Find any engineering college and visit their official website</p>
+                    </div>
+                    
+                    <div class="search-container">
+                        <div class="search-box-wrapper">
+                            <div class="search-input-group">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="collegeSearchInput" placeholder="Search for any college in India..." class="search-input">
+                                <button id="searchBtn" class="search-btn">
+                                    <i class="fas fa-search"></i> Search
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="search-filters">
+                            <select id="stateFilter" class="filter-select">
+                                <option value="">All States</option>
+                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                <option value="Assam">Assam</option>
+                                <option value="Bihar">Bihar</option>
+                                <option value="Chhattisgarh">Chhattisgarh</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Goa">Goa</option>
+                                <option value="Gujarat">Gujarat</option>
+                                <option value="Haryana">Haryana</option>
+                                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                                <option value="Jharkhand">Jharkhand</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Kerala">Kerala</option>
+                                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Manipur">Manipur</option>
+                                <option value="Meghalaya">Meghalaya</option>
+                                <option value="Mizoram">Mizoram</option>
+                                <option value="Nagaland">Nagaland</option>
+                                <option value="Odisha">Odisha</option>
+                                <option value="Punjab">Punjab</option>
+                                <option value="Rajasthan">Rajasthan</option>
+                                <option value="Sikkim">Sikkim</option>
+                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                <option value="Telangana">Telangana</option>
+                                <option value="Tripura">Tripura</option>
+                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                <option value="Uttarakhand">Uttarakhand</option>
+                                <option value="West Bengal">West Bengal</option>
+                            </select>
+                            
+                            <select id="typeFilter" class="filter-select">
+                                <option value="">All Types</option>
+                                <option value="IIT">IIT</option>
+                                <option value="NIT">NIT</option>
+                                <option value="IIIT">IIIT</option>
+                                <option value="Private">Private</option>
+                                <option value="State">State</option>
+                                <option value="Govt">Government</option>
+                            </select>
+                            
+                            <select id="examFilter" class="filter-select">
+                                <option value="">All Exams</option>
+                                <option value="JEE Advanced">JEE Advanced</option>
+                                <option value="JEE Main">JEE Main</option>
+                                <option value="BITSAT">BITSAT</option>
+                                <option value="SRMJEEE">SRMJEEE</option>
+                                <option value="VITEEE">VITEEE</option>
+                                <option value="AEEE">AEEE</option>
+                                <option value="TNEA">TNEA</option>
+                                <option value="TS EAMCET">TS EAMCET</option>
+                                <option value="AP EAMCET">AP EAMCET</option>
+                                <option value="KEAM">KEAM</option>
+                                <option value="WBJEE">WBJEE</option>
+                                <option value="MHT-CET">MHT-CET</option>
+                                <option value="KCET">KCET</option>
+                                <option value="GUJCET">GUJCET</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Search Results -->
+                    <div id="searchResults" class="search-results" style="display: none;">
+                        <div class="results-header">
+                            <h3><span id="searchResultsCount">0</span> colleges found</h3>
+                            <button id="clearSearchBtn" class="btn-secondary btn-small">
+                                <i class="fas fa-times"></i> Clear
+                            </button>
+                        </div>
+                        <div id="searchResultsGrid" class="search-results-grid">
+                            <!-- Results will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links Section -->
+                <div class="quick-links">
+                    <h3><i class="fas fa-star"></i> Popular Colleges</h3>
+                    <div class="quick-links-grid">
+                        <div class="quick-link-item" onclick="quickSearch('IIT')">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>All IITs</span>
+                        </div>
+                        <div class="quick-link-item" onclick="quickSearch('NIT')">
+                            <i class="fas fa-university"></i>
+                            <span>All NITs</span>
+                        </div>
+                        <div class="quick-link-item" onclick="quickSearch('Private')">
+                            <i class="fas fa-building"></i>
+                            <span>Top Private</span>
+                        </div>
+                        <div class="quick-link-item" onclick="quickSearch('Chennai')">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Chennai</span>
+                        </div>
+                        <div class="quick-link-item" onclick="quickSearch('Bangalore')">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Bangalore</span>
+                        </div>
+                        <div class="quick-link-item" onclick="quickSearch('Hyderabad')">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Hyderabad</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Colleges Grid -->
+                <div id="collegesGrid" class="colleges-grid">
+                    <!-- Colleges will be loaded here dynamically -->
+                </div>
+            </section>
+
+            <!-- Results Section (Hidden by default) -->
+            <section id="resultsSection" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <h1><i class="fas fa-chart-bar"></i> Your Prediction Results</h1>
+                    <p id="resultsCount">0 colleges found based on your preferences</p>
+                </div>
+
+                <!-- Results Actions -->
+                <div class="results-actions">
+                    <button id="exportBtn" class="btn-secondary">
+                        <i class="fas fa-download"></i> Export Results
+                    </button>
+                    <button id="saveBtn" class="btn-secondary">
+                        <i class="fas fa-save"></i> Save Results
+                    </button>
+                    <button id="shareBtn" class="btn-secondary">
+                        <i class="fas fa-share"></i> Share Results
+                    </button>
+                </div>
+
+                <!-- Results Grid -->
+                <div id="resultsGrid" class="results-grid">
+                    <!-- Results will be loaded here dynamically -->
+                </div>
+            </section>
+        </main>
     </div>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/predict.js"></script>
+    <script src="js/colleges.js"></script>
+    <script src="js/results.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>

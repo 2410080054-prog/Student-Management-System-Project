@@ -1,13 +1,19 @@
 {
   "name": "college-predictor-frontend",
   "version": "1.0.0",
-  "description": "Frontend for college admission predictor using HTML/CSS/JS",
+  "description": "Frontend for College Admission Predictor",
   "main": "index.html",
   "scripts": {
     "start": "python -m http.server 3000",
-    "dev": "python -m http.server 3000"
+    "dev": "npx http-server -p 3000 -c-1",
+    "build": "echo 'Build completed'",
+    "serve": "npx serve -s . -l 3000"
   },
-  "keywords": ["college", "admission", "predictor", "engineering"],
-  "author": "",
-  "license": "MIT"
+  "keywords": ["college", "admission", "predictor", "frontend"],
+  "author": "College Predictor Team",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "serve": "^14.2.1"
+  }
 }
